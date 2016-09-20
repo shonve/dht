@@ -150,7 +150,6 @@ class DHTServer(DHTClient):
             try:
                 (data, address) = self.ufd.recvfrom(65536)
                 msg = bdecode(data)
-                pprint(msg)
                 self.on_message(msg, address)
             except Exception:
                 pass
@@ -189,7 +188,7 @@ class DHTServer(DHTClient):
 
     def on_announce_peer_request(self, msg, address):
         try:
-            print msg.encode('hex')
+            pprint(msg)
             infohash = msg["a"]["info_hash"]
             token = msg["a"]["token"]
             nid = msg["a"]["id"]
