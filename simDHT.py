@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import MySQLdb
 import socket
 from hashlib import sha1
 from random import randint
@@ -140,7 +141,12 @@ class DHTServer(DHTClient):
 
         self.ufd = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         self.ufd.bind((self.bind_ip, self.bind_port))
-
+        self.conn = MySQLdb.connect(host='115.159.122.133', user='root', passwd='802329')
+        self.cursor = self.conn.cursor()
+        self.cursor.execute("""create database if not exists torrent""")
+        self.conn.select_db("torrent")
+        self.cursor.execute(
+            """create table to_tb(id long not null primary key auto_increment, magnet varchar(40)) not null""")
         timer(RE_JOIN_DHT_INTERVAL, self.re_join_DHT)
 
 
@@ -200,6 +206,8 @@ class DHTServer(DHTClient):
                 else:
                     port = msg["a"]["port"]
                     if port < 1 or port > 65535: return
+                self.cursor.execute(
+                    """insert into to_tb (magnet) values ('magnet:?xt = urn:btih:' + %s)""" % infohash)
                 self.master.log(infohash, (address[0], port))
         except Exception:
             pass

@@ -1,0 +1,38 @@
+安装python-libtorrent
+sudo apt-get install python-pip
+sudo apt-get install python-libtorrent
+
+安装Scrapy
+sudo apt-get install build-essential
+sudo apt-get install python-dev
+sudo apt-get install libxml2-dev
+sudo apt-get install libxslt1-dev
+sudo apt-get install python-setuptools
+sudo apt-get install zlib1g-dev
+sudo apt-get install libffi-dev
+sudo apt-get install openssl
+sudo apt-get install libssl-dev
+sudo pip install pyasn1
+sudo pip install attrs
+sudo easy_install Scrapy
+
+安装mysql
+sudo apt-get install mysql-server mysql-client
+
+mysql远程连接配置
+netstat -apn|grep 3306 
+sudo vi /etc/mysql/my.cnf
+注释掉里边的bind-address配置项
+# Instead of skip-networking the default is now to listen only on
+# localhost which is more compatible and is not less secure.
+bind-address = 127.0.0.1
+service mysql restart
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123' WITH GRANT OPTION
+flush privileges
+
+安装MySQLdb
+sudo apt-get install python-mysqldb
+
+安装bencode
+sudo easy_install bencode
+
