@@ -141,14 +141,41 @@ class DHTServer(DHTClient):
 
         self.ufd = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         self.ufd.bind((self.bind_ip, self.bind_port))
-        self.conn = MySQLdb.connect(host='115.159.122.133', user='root', passwd='802329')
-        self.cursor = self.conn.cursor()
-        self.cursor.execute("""create database if not exists torrent""")
-        self.conn.select_db("torrent")
-        self.cursor.execute(
-            """create table to_tb(id long not null primary key auto_increment, magnet varchar(40)) not null""")
+
+        #在编个mysql类
+        try:
+            self.conn = MySQLdb.connect(host='115.159.122.133', user='root', passwd='802329')
+            self.cursor = self.conn.cursor()
+            self.cursor.execute("""create database if not exists torrent""")
+            self.conn.select_db("torrent")
+            self.cursor.execute(
+                """create table if not exists to3(id bigint not null primary key auto_increment, magnet varchar(50) not null)""")
+        except MySQLdb.Error, e:
+            print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+            self.conn.commit()
         timer(RE_JOIN_DHT_INTERVAL, self.re_join_DHT)
 
+    #
+    # try:
+    #     conn = MySQLdb.connect(host='115.159.122.133', user='root', passwd='802329')
+    #     cursor = conn.cursor()
+    #     infohash = "adhflatydutiasvc3yut"
+    #     try:
+    #         cursor.execute("""create database if not exists torrent""")
+    #     except MySQLdb.Error, e:
+    #         print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+    #     cursor.execute("""use torrent""")
+    #     cursor.execute("""use torrent""")
+    #     cursor.execute(
+    #         """create table if not exists to3(id bigint not null primary key auto_increment, magnet varchar(50) not null)""")
+    #
+    #     cursor.execute("""insert into to_tb ( magnet) values ('magnet:?xt = urn:btih:%s')""" % infohash)
+    #     conn.commit()
+    #
+    #     cursor.close()
+    #     conn.close()
+    # except MySQLdb.Error, e:
+    #     print "Mysql Error %d: %s" % (e.args[0], e.args[1])
 
     def run(self):
         self.re_join_DHT()
