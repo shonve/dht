@@ -37,4 +37,5 @@ sudo apt-get install python-mysqldb
 sudo easy_install bencode
 
 
-
+sudo pip install netaddr
+sudo pip install requests
