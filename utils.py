@@ -51,3 +51,6 @@ def encode_nodes(nodes):
     for node in nodes:
         n.extend([node[0], dottedQuadToNum(node[1].host), node[1].port])
         return struct.pack("!" + "20sIH" * len(nodes), *n)
+
+
+
